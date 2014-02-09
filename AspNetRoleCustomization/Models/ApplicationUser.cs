@@ -23,7 +23,7 @@ namespace AspNetRoleCustomization.Models
         public string Email { get; set; }
 
 
-        public virtual HashSet<ApplicationUserGroup> Groups { get; set; }
+        public virtual ICollection<ApplicationUserGroup> Groups { get; set; }
     }
 
 }

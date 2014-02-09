@@ -7,6 +7,8 @@ namespace AspNetRoleCustomization.Models
 {
     public class ApplicationRole : IdentityRole
     {
+        public string Description { get; set; }
+
         public ApplicationRole() : base()
         {
         }

@@ -32,6 +32,7 @@ namespace AspNetRoleCustomization.Models
             modelBuilder.Entity<ApplicationUser>().ToTable("AspNetUsers");
             EntityTypeConfiguration<ApplicationUser> table = modelBuilder.Entity<ApplicationUser>().ToTable("AspNetUsers");
             table.Property((ApplicationUser u) => u.UserName).IsRequired();
+
             modelBuilder.Entity<ApplicationUser>().HasMany<IdentityUserRole>((ApplicationUser u) => u.Roles);
             modelBuilder.Entity<IdentityUserRole>().HasKey((IdentityUserRole r) => new { UserId = r.UserId, RoleId = r.RoleId }).ToTable("AspNetUserRoles");
 
@@ -52,7 +53,10 @@ namespace AspNetRoleCustomization.Models
             entityTypeConfiguration1.Property((ApplicationRole r) => r.Name).IsRequired();
         }
 
-        public System.Data.Entity.DbSet<AspNetRoleCustomization.Models.Group> Groups { get; set; }
+        public virtual System.Data.Entity.DbSet<AspNetRoleCustomization.Models.Group> Groups { get; set; }
+
+        public System.Data.Entity.DbSet<AspNetRoleCustomization.Models.ApplicationRole> ApplicationRoles { get; set; }
+        //new public virtual IDbSet<ApplicationRole> Roles { get; set; }
 
     }
 }

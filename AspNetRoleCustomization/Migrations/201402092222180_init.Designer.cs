@@ -13,7 +13,7 @@ namespace AspNetRoleCustomization.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201402091707009_init"; }
+            get { return "201402092222180_init"; }
         }
         
         string IMigrationMetadata.Source
