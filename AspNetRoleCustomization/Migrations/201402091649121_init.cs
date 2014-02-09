@@ -12,7 +12,7 @@ namespace AspNetRoleCustomization.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
+                        Name = c.String(nullable: false),
                         ApplicationRole_Id = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)

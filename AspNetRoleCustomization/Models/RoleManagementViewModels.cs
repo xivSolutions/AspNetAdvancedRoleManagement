@@ -39,9 +39,7 @@ namespace AspNetRoleCustomization.Models
                 // An EditorViewModel will be used by Editor Template:
                 var rvm = new SelectGroupEditorViewModel(role);
                 this.Groups.Add(rvm);
-            }
-
-            
+            }           
 
             // Set the Selected property to true where user is already a member:
             foreach (var group in user.Groups)

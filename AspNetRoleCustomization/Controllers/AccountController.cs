@@ -250,11 +250,11 @@ namespace AspNetRoleCustomization.Controllers
 
 
         [Authorize(Roles = "Admin")]
-        public ActionResult UserRoles(string id)
+        public ActionResult UserGroups(string id)
         {
             var Db = new ApplicationDbContext();
             var user = Db.Users.First(u => u.UserName == id);
-            var model = new SelectUserRolesViewModel(user);
+            var model = new SelectUserGroupsViewModel(user);
             return View(model);
         }
 
@@ -262,19 +262,19 @@ namespace AspNetRoleCustomization.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public ActionResult UserRoles(SelectUserRolesViewModel model)
+        public ActionResult UserGroups(SelectUserGroupsViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var idManager = new IdentityManager();
                 var Db = new ApplicationDbContext();
                 var user = Db.Users.First(u => u.UserName == model.UserName);
-                idManager.ClearUserRoles(user.Id);
-                foreach (var role in model.Roles)
+                idManager.ClearUserGroups(user.Id);
+                foreach (var group in model.Groups)
                 {
-                    if (role.Selected)
+                    if (group.Selected)
                     {
-                        idManager.AddUserToRole(user.Id, role.RoleName);
+                        idManager.AddUserToGroup(user.Id, group.GroupId);
                     }
                 }
                 return RedirectToAction("index");

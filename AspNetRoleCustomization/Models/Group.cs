@@ -25,7 +25,7 @@ namespace AspNetRoleCustomization.Models
         public int Id { get; set; }
 
         public string Name { get; set; }
-        public HashSet<ApplicationRoleGroup> Roles { get; set; }
-        public HashSet<ApplicationUser> Users { get; set; }
+        public virtual HashSet<ApplicationRoleGroup> Roles { get; set; }
+        public virtual HashSet<ApplicationUser> Users { get; set; }
     }
 }

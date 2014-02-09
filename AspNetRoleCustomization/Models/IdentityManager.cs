@@ -48,7 +48,8 @@ namespace AspNetRoleCustomization.Models
         public void ClearUserRoles(string userId)
         {
             var user = _userManager.FindById(userId);
-            foreach (var role in user.Roles)
+            var userRoles = user.Roles.ToList();
+            foreach (var role in userRoles)
             {
                 _userManager.RemoveFromRole(userId, role.Role.Name);
             }
@@ -85,16 +86,16 @@ namespace AspNetRoleCustomization.Models
         }
 
 
-        public void ClearUserRoleGroups(string userId)
+        public void ClearUserGroups(string userId)
         {
-            this.ClearUserRoles(userId);
+            //this.ClearUserRoles(userId);
             var user = _db.Users.Find(userId);
             user.Groups.Clear();
             _db.SaveChanges();
         }
 
 
-        public void AddUserToRoleGroup(string userId, int roleGroupId)
+        public void AddUserToGroup(string userId, int roleGroupId)
         {
             var group = _db.Groups.Find(roleGroupId);
             var user = _db.Users.Find(userId);

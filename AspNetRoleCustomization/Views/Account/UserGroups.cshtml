@@ -1,13 +1,13 @@
-﻿@model AspNetRoleCustomization.Models.SelectUserRolesViewModel
+﻿@model AspNetRoleCustomization.Models.SelectUserGroupsViewModel
 
 @{
-    ViewBag.Title = "User Roles";
+    ViewBag.Title = "User Groups";
 }
 
-<h2>Roles for user @Html.DisplayFor(model => model.UserName)</h2>
+<h2>Group Assignments for user @Html.DisplayFor(model => model.UserName)</h2>
 <hr />
 
-@using (Html.BeginForm("UserRoles", "Account", FormMethod.Post, new { encType = "multipart/form-data", name = "myform" }))
+@using (Html.BeginForm("UserGroups", "Account", FormMethod.Post, new { encType = "multipart/form-data", name = "myform" }))
 {
     @Html.AntiForgeryToken()
 
@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <h4>Select Role Assignments</h4>
+        <h4>Select Group Assignments for this User</h4>
         <br />
         <hr />
 
@@ -29,11 +29,11 @@
                     Select
                 </th>
                 <th>
-                    Role
+                    Group
                 </th>
             </tr>
 
-            @Html.EditorFor(model => model.Roles)
+            @Html.EditorFor(model => model.Groups)
         </table>
         <br />
         <hr />

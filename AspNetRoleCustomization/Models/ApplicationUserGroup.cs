@@ -12,7 +12,7 @@ namespace AspNetRoleCustomization.Models
         [Required]
         public int GroupId { get; set; }
 
-        public ApplicationUser User { get; set; }
-        public Group Group { get; set; }
+        public virtual ApplicationUser User { get; set; }
+        public virtual Group Group { get; set; }
     }
 }

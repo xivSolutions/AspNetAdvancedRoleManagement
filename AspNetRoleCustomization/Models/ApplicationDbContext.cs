@@ -41,6 +41,8 @@ namespace AspNetRoleCustomization.Models
             modelBuilder.Entity<Group>().HasMany<ApplicationRoleGroup>((Group g) => g.Roles);
             modelBuilder.Entity<ApplicationRoleGroup>().HasKey((ApplicationRoleGroup gr) => new { RoleId = gr.RoleId, GroupId = gr.GroupId }).ToTable("ApplicationRoleGroups");
 
+            EntityTypeConfiguration<Group> groupsConfig = modelBuilder.Entity<Group>().ToTable("Groups");
+            groupsConfig.Property((Group r) => r.Name).IsRequired();
 
             EntityTypeConfiguration<IdentityUserLogin> entityTypeConfiguration = modelBuilder.Entity<IdentityUserLogin>().HasKey((IdentityUserLogin l) => new { UserId = l.UserId, LoginProvider = l.LoginProvider, ProviderKey = l.ProviderKey }).ToTable("AspNetUserLogins");
             entityTypeConfiguration.HasRequired<IdentityUser>((IdentityUserLogin u) => u.User);
