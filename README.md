@@ -1,7 +1,7 @@
 ASP.NET Advanced Role-Based Management
 ======================================
 
-This is an example project to accompany a blog post describing a somewhat more complex approach to managing application authorization by creating groups of roles, to which indicidual users may be added or removed. 
+This is an example project to accompany a blog post describing a somewhat more complex approach to managing application authorization by creating groups of roles, to which individual users may be added or removed. 
 
 The objective is to use the `[Authorize]` attribute to establish fine-grained roles at the application level, and then create Groups to which these roles are added. In this way, groups of "premissions" may be configured, and then users can be assigned to one or more of these "role groups," making assignment of application roles potentially parallell real-world user organization roles.
 
