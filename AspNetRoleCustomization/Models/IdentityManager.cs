@@ -85,6 +85,38 @@ namespace AspNetRoleCustomization.Models
         }
 
 
+        public void ClearUserRoleGroups(string userId)
+        {
+            this.ClearUserRoles(userId);
+            var user = _db.Users.Find(userId);
+            user.Groups.Clear();
+            _db.SaveChanges();
+        }
+
+
+        public void AddUserToRoleGroup(string userId, int roleGroupId)
+        {
+            var group = _db.Groups.Find(roleGroupId);
+            var user = _db.Users.Find(userId);
+
+            var userGroup = new ApplicationUserGroup()
+            {
+                Group = group,
+                GroupId = group.Id,
+                User = user,
+                UserId = user.Id
+            };
+
+            foreach(var role in group.Roles)
+            {
+                _userManager.AddToRole(userId, role.Role.Name);
+            }
+            user.Groups.Add(userGroup);
+            _db.SaveChanges();
+        }
+
+
+
         //public void ClearUserRoleGroups(string userId)
         //{
         //    var groups = _db.RoleGroups.Where(g => g.Users.Any(u => u.Id == userId));
