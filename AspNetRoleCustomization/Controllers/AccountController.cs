@@ -13,6 +13,8 @@ namespace AspNetRoleCustomization.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        private ApplicationDbContext _db = new ApplicationDbContext();
+
         public AccountController()
             : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
         {
@@ -177,8 +179,7 @@ namespace AspNetRoleCustomization.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
-            var Db = new ApplicationDbContext();
-            var users = Db.Users;
+            var users = _db.Users;
             var model = new List<EditUserViewModel>();
             foreach (var user in users)
             {
@@ -192,8 +193,7 @@ namespace AspNetRoleCustomization.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Edit(string id, ManageMessageId? Message = null)
         {
-            var Db = new ApplicationDbContext();
-            var user = Db.Users.First(u => u.UserName == id);
+            var user = _db.Users.First(u => u.UserName == id);
             var model = new EditUserViewModel(user);
             ViewBag.MessageId = Message;
             return View(model);
@@ -207,13 +207,12 @@ namespace AspNetRoleCustomization.Controllers
         {
             if (ModelState.IsValid)
             {
-                var Db = new ApplicationDbContext();
-                var user = Db.Users.First(u => u.UserName == model.UserName);
+                var user = _db.Users.First(u => u.UserName == model.UserName);
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
                 user.Email = model.Email;
-                Db.Entry(user).State = System.Data.Entity.EntityState.Modified;
-                await Db.SaveChangesAsync();
+                _db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -225,8 +224,7 @@ namespace AspNetRoleCustomization.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Delete(string id = null)
         {
-            var Db = new ApplicationDbContext();
-            var user = Db.Users.First(u => u.UserName == id);
+            var user = _db.Users.First(u => u.UserName == id);
             var model = new EditUserViewModel(user);
             if (user == null)
             {
@@ -241,10 +239,9 @@ namespace AspNetRoleCustomization.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DeleteConfirmed(string id)
         {
-            var Db = new ApplicationDbContext();
-            var user = Db.Users.First(u => u.UserName == id);
-            Db.Users.Remove(user);
-            Db.SaveChanges();
+            var user = _db.Users.First(u => u.UserName == id);
+            _db.Users.Remove(user);
+            _db.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -252,8 +249,7 @@ namespace AspNetRoleCustomization.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult UserGroups(string id)
         {
-            var Db = new ApplicationDbContext();
-            var user = Db.Users.First(u => u.UserName == id);
+            var user = _db.Users.First(u => u.UserName == id);
             var model = new SelectUserGroupsViewModel(user);
             return View(model);
         }
@@ -267,8 +263,7 @@ namespace AspNetRoleCustomization.Controllers
             if (ModelState.IsValid)
             {
                 var idManager = new IdentityManager();
-                var Db = new ApplicationDbContext();
-                var user = Db.Users.First(u => u.UserName == model.UserName);
+                var user = _db.Users.First(u => u.UserName == model.UserName);
                 idManager.ClearUserGroups(user.Id);
                 foreach (var group in model.Groups)
                 {

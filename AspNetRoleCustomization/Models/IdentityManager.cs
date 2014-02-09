@@ -88,7 +88,7 @@ namespace AspNetRoleCustomization.Models
 
         public void ClearUserGroups(string userId)
         {
-            //this.ClearUserRoles(userId);
+            this.ClearUserRoles(userId);
             var user = _db.Users.Find(userId);
             user.Groups.Clear();
             _db.SaveChanges();
@@ -114,6 +114,47 @@ namespace AspNetRoleCustomization.Models
             }
             user.Groups.Add(userGroup);
             _db.SaveChanges();
+        }
+
+
+        public void ClearGroupRoles(int groupId)
+        {
+            var group = _db.Groups.Find(groupId);
+            var rolesToRemove = group.Roles.ToList();
+            var groupUsers = _db.Users.Where(u => u.Groups.Any(g => g.GroupId == group.Id));
+            foreach(var user in groupUsers)
+            {
+                foreach(var role in group.Roles)
+                {
+                    this.RemoveFromRole(user.Id, role.Role.Name);
+                }
+            }
+            group.Roles.Clear();
+            _db.SaveChanges();
+        }
+
+
+        public void AddRoleToGroup(int groupId, string roleName)
+        {
+            var group = _db.Groups.Find(groupId);
+            var role = _db.Roles.First(r => r.Name == roleName);
+            var newgroupRole = new ApplicationRoleGroup()
+            {
+                GroupId = group.Id,
+                Group = group,
+                RoleId = role.Id,
+                Role = (ApplicationRole)role
+            };
+            group.Roles.Add(newgroupRole);
+            _db.SaveChanges();
+
+            // Add all of the users in this group to the new role:
+            var groupUsers = _db.Users.Where(u => u.Groups.Any(g => g.GroupId == group.Id));
+            foreach(var user in groupUsers)
+            {
+                this.AddUserToRole(user.Id, role.Name);
+            }
+
         }
 
 
