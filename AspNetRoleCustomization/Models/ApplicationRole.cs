@@ -9,16 +9,11 @@ namespace AspNetRoleCustomization.Models
     {
         public ApplicationRole() : base()
         {
-            this.Groups = new HashSet<ApplicationRoleGroup>();
         }
 
 
         public ApplicationRole(string roleName) : base(roleName)
         {
-            this.Groups = new HashSet<ApplicationRoleGroup>();
         }
-
-
-        public virtual HashSet<ApplicationRoleGroup> Groups { get; set; }
     }
 }

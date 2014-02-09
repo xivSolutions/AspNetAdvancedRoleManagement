@@ -13,11 +13,8 @@ namespace AspNetRoleCustomization.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Name = c.String(nullable: false),
-                        ApplicationRole_Id = c.String(maxLength: 128),
                     })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AspNetRoles", t => t.ApplicationRole_Id)
-                .Index(t => t.ApplicationRole_Id);
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.ApplicationRoleGroups",
@@ -108,16 +105,13 @@ namespace AspNetRoleCustomization.Migrations
                 c => new
                     {
                         Id = c.String(nullable: false, maxLength: 128),
-                        Group_Id = c.Int(),
                         FirstName = c.String(nullable: false),
                         LastName = c.String(nullable: false),
                         Email = c.String(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.IdentityUsers", t => t.Id)
-                .ForeignKey("dbo.Groups", t => t.Group_Id)
-                .Index(t => t.Id)
-                .Index(t => t.Group_Id);
+                .Index(t => t.Id);
             
             CreateTable(
                 "dbo.AspNetRoles",
@@ -134,7 +128,6 @@ namespace AspNetRoleCustomization.Migrations
         public override void Down()
         {
             DropForeignKey("dbo.AspNetRoles", "Id", "dbo.IdentityRoles");
-            DropForeignKey("dbo.AspNetUsers", "Group_Id", "dbo.Groups");
             DropForeignKey("dbo.AspNetUsers", "Id", "dbo.IdentityUsers");
             DropForeignKey("dbo.ApplicationUserGroups", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.ApplicationUserGroups", "GroupId", "dbo.Groups");
@@ -144,9 +137,7 @@ namespace AspNetRoleCustomization.Migrations
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.IdentityUsers");
             DropForeignKey("dbo.ApplicationRoleGroups", "GroupId", "dbo.Groups");
             DropForeignKey("dbo.ApplicationRoleGroups", "RoleId", "dbo.AspNetRoles");
-            DropForeignKey("dbo.Groups", "ApplicationRole_Id", "dbo.AspNetRoles");
             DropIndex("dbo.AspNetRoles", new[] { "Id" });
-            DropIndex("dbo.AspNetUsers", new[] { "Group_Id" });
             DropIndex("dbo.AspNetUsers", new[] { "Id" });
             DropIndex("dbo.ApplicationUserGroups", new[] { "UserId" });
             DropIndex("dbo.ApplicationUserGroups", new[] { "GroupId" });
@@ -156,7 +147,6 @@ namespace AspNetRoleCustomization.Migrations
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.ApplicationRoleGroups", new[] { "GroupId" });
             DropIndex("dbo.ApplicationRoleGroups", new[] { "RoleId" });
-            DropIndex("dbo.Groups", new[] { "ApplicationRole_Id" });
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.AspNetUsers");
             DropTable("dbo.ApplicationUserGroups");

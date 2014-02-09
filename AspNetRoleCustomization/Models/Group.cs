@@ -9,7 +9,6 @@ namespace AspNetRoleCustomization.Models
     {
         public Group()
         {
-            this.Users = new HashSet<ApplicationUser>();
             this.Roles = new HashSet<ApplicationRoleGroup>();
         }
 
@@ -26,6 +25,5 @@ namespace AspNetRoleCustomization.Models
 
         public string Name { get; set; }
         public virtual HashSet<ApplicationRoleGroup> Roles { get; set; }
-        public virtual HashSet<ApplicationUser> Users { get; set; }
     }
 }
