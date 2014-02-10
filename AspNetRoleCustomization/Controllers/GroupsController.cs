@@ -14,13 +14,14 @@ namespace AspNetRoleCustomization.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        [Authorize(Roles = "Admin, ViewGroups")]
         public ActionResult Index()
         {
             return View(db.Groups.ToList());
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, ViewGroups")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -36,14 +37,14 @@ namespace AspNetRoleCustomization.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, ViewGroups")]
         public ActionResult Create()
         {
             return View();
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, GroupEditor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include="Name")] Group group)
@@ -59,7 +60,7 @@ namespace AspNetRoleCustomization.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, GroupEditor")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -75,7 +76,7 @@ namespace AspNetRoleCustomization.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, GroupEditor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include="Name")] Group group)
@@ -90,7 +91,7 @@ namespace AspNetRoleCustomization.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, GroupEditor")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -106,7 +107,7 @@ namespace AspNetRoleCustomization.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, GroupEditor")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -118,7 +119,7 @@ namespace AspNetRoleCustomization.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, GroupEditor")]
         public ActionResult GroupRoles(int id)
         {
             var group = db.Groups.Find(id);
@@ -128,7 +129,7 @@ namespace AspNetRoleCustomization.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, GroupEditor")]
         [ValidateAntiForgeryToken]
         public ActionResult GroupRoles(SelectGroupRolesViewModel model)
         {

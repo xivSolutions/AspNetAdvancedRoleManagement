@@ -14,6 +14,7 @@ namespace AspNetRoleCustomization.Controllers
     public class AccountController : Controller
     {
         private ApplicationDbContext _db = new ApplicationDbContext();
+        public UserManager<ApplicationUser> UserManager { get; private set; }
 
         public AccountController()
             : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
@@ -25,9 +26,6 @@ namespace AspNetRoleCustomization.Controllers
         {
             UserManager = userManager;
         }
-
-
-        public UserManager<ApplicationUser> UserManager { get; private set; }
 
 
         [AllowAnonymous]
@@ -62,7 +60,7 @@ namespace AspNetRoleCustomization.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, EditUser")]
         public ActionResult Register()
         {
             return View();
@@ -70,7 +68,7 @@ namespace AspNetRoleCustomization.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, EditUser")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
@@ -90,7 +88,7 @@ namespace AspNetRoleCustomization.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, EditUser")]
         public ActionResult Manage(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
@@ -107,7 +105,7 @@ namespace AspNetRoleCustomization.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, EditUser, ManageProfile")]
         public async Task<ActionResult> Manage(ManageUserViewModel model)
         {
             bool hasPassword = HasPassword();
@@ -176,7 +174,7 @@ namespace AspNetRoleCustomization.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, EditUser")]
         public ActionResult Index()
         {
             var users = _db.Users;
@@ -190,7 +188,7 @@ namespace AspNetRoleCustomization.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, EditUser")]
         public ActionResult Edit(string id, ManageMessageId? Message = null)
         {
             var user = _db.Users.First(u => u.UserName == id);
@@ -201,7 +199,7 @@ namespace AspNetRoleCustomization.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, EditUser")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(EditUserViewModel model)
         {
@@ -221,7 +219,7 @@ namespace AspNetRoleCustomization.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, EditUser")]
         public ActionResult Delete(string id = null)
         {
             var user = _db.Users.First(u => u.UserName == id);
@@ -236,7 +234,7 @@ namespace AspNetRoleCustomization.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, EditUser")]
         public ActionResult DeleteConfirmed(string id)
         {
             var user = _db.Users.First(u => u.UserName == id);
@@ -246,7 +244,7 @@ namespace AspNetRoleCustomization.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, EditGroups")]
         public ActionResult UserGroups(string id)
         {
             var user = _db.Users.First(u => u.UserName == id);
@@ -256,7 +254,7 @@ namespace AspNetRoleCustomization.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, EditGroups")]
         [ValidateAntiForgeryToken]
         public ActionResult UserGroups(SelectUserGroupsViewModel model)
         {
@@ -275,6 +273,14 @@ namespace AspNetRoleCustomization.Controllers
                 return RedirectToAction("index");
             }
             return View();
+        }
+
+        [Authorize(Roles = "Admin, ViewPermissions")]
+        public ActionResult UserPermissions(string id)
+        {
+            var user = _db.Users.First(u => u.UserName == id);
+            var model = new UserPermissionsViewModel(user);
+            return View(model);
         }
 
 

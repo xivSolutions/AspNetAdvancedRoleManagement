@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<AspNetRoleCustomization.Models.EditUserViewModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Users";
 }
 
-<h2>Index</h2>
+<h2>Application Users</h2>
 
 <p>
     @Html.ActionLink("Create New", "Register") 
@@ -44,6 +44,7 @@
             @Html.ActionLink("Edit", "Edit", new { id = item.UserName }) |
             @Html.ActionLink("Groups", "UserGroups", new { id = item.UserName }) |
             @Html.ActionLink("Delete", "Delete", new { id = item.UserName })
+            @Html.ActionLink("Effective Permissions", "UserPermissions", new { id = item.UserName })
         </td>
     </tr>
 }

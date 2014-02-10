@@ -62,6 +62,34 @@ namespace AspNetRoleCustomization.Models
         }
 
 
+        public void DeleteRole(string roleId)
+        {
+            var roleGroups = _db.Groups.Where(g => g.Roles.Any(r => r.RoleId == roleId));
+            var roleUsers = _db.Users.Where(u => u.Roles.Any(r => r.RoleId == roleId));
+            var role = _db.ApplicationRoles.Find(roleId);
+
+            foreach(var user in roleUsers)
+            {
+                this.RemoveFromRole(user.Id, role.Name);
+            }
+
+            foreach(var group in roleGroups)
+            {
+                var arg = new ApplicationRoleGroup()
+                {
+                    RoleId = roleId,
+                    GroupId = group.Id,
+                    Role = role,
+                    Group = group
+                };
+
+                group.Roles.Remove(arg);
+            }
+            _db.ApplicationRoles.Remove(role);
+            _db.SaveChanges();
+        }
+
+
         public void CreateGroup(string groupName)
         {
             if(this.GroupNameExists(groupName))
@@ -154,7 +182,6 @@ namespace AspNetRoleCustomization.Models
             {
                 this.AddUserToRole(user.Id, role.Name);
             }
-
         }
 
 

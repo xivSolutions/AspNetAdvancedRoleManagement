@@ -14,13 +14,14 @@ namespace AspNetRoleCustomization.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        [Authorize(Roles = "Admin, ViewPermissions")]
         public ActionResult Index()
         {
             var roles = db.ApplicationRoles.ToList();
             return View(db.ApplicationRoles.ToList());
         }
 
-
+        [Authorize(Roles = "Admin, SuperAdmin, ViewPermissions")]
         public ActionResult Details(string id)
         {
             if (id == null)
@@ -35,7 +36,7 @@ namespace AspNetRoleCustomization.Controllers
             return View(applicationrole);
         }
 
-
+        [Authorize(Roles = "Admin, EditPermissions")]
         public ActionResult Create()
         {
             return View();
@@ -44,6 +45,7 @@ namespace AspNetRoleCustomization.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, EditPermissions")]
         public ActionResult Create([Bind(Include="Name,Description")] ApplicationRole applicationrole)
         {
             if (ModelState.IsValid)
@@ -56,7 +58,7 @@ namespace AspNetRoleCustomization.Controllers
             return View(applicationrole);
         }
 
-
+        [Authorize(Roles = "Admin, EditPermissions")]
         public ActionResult Edit(string id)
         {
             if (id == null)
@@ -74,6 +76,7 @@ namespace AspNetRoleCustomization.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, EditPermissions")]
         public ActionResult Edit([Bind(Include="Id,Name,Description")] ApplicationRole applicationrole)
         {
             if (ModelState.IsValid)
@@ -85,7 +88,7 @@ namespace AspNetRoleCustomization.Controllers
             return View(applicationrole);
         }
 
-
+        [Authorize(Roles = "Admin, EditPermissions")]
         public ActionResult Delete(string id)
         {
             if (id == null)
@@ -103,11 +106,12 @@ namespace AspNetRoleCustomization.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, EditPermissions")]
         public ActionResult DeleteConfirmed(string id)
         {
             ApplicationRole applicationrole = db.ApplicationRoles.Find(id);
-            db.Roles.Remove(applicationrole);
-            db.SaveChanges();
+            var idManager = new IdentityManager();
+            idManager.DeleteRole(id);
             return RedirectToAction("Index");
         }
 
